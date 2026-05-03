@@ -8,10 +8,10 @@ import {
   Body,
   HttpCode,
   HttpStatus,
-} from '@nestjs/common';
-import { StockService } from './stock.service';
-import { CreateStockDto } from './dto/create-stock.dto';
-import { UpdateStockDto } from './dto/update-stock.dto';
+} from '@nestjs/common'
+import { StockService } from './stock.service'
+import { CreateStockDto } from './dto/create-stock.dto'
+import { UpdateStockDto } from './dto/update-stock.dto'
 
 @Controller('stocks')
 export class StockController {
@@ -19,18 +19,18 @@ export class StockController {
 
   @Get()
   findAll() {
-    return this.stockService.findAll();
+    return this.stockService.findAll()
   }
 
   @Get(':ticker')
   findOne(@Param('ticker') ticker: string) {
-    return this.stockService.findOne(ticker);
+    return this.stockService.findOne(ticker)
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
   create(@Body() createStockDto: CreateStockDto) {
-    return this.stockService.create(createStockDto);
+    return this.stockService.create(createStockDto)
   }
 
   @Patch(':ticker')
@@ -38,11 +38,11 @@ export class StockController {
     @Param('ticker') ticker: string,
     @Body() updateStockDto: UpdateStockDto,
   ) {
-    return this.stockService.update(ticker, updateStockDto);
+    return this.stockService.update(ticker, updateStockDto)
   }
 
   @Delete(':ticker')
   remove(@Param('ticker') ticker: string) {
-    return this.stockService.remove(ticker);
+    return this.stockService.remove(ticker)
   }
 }

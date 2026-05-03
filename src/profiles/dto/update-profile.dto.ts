@@ -1,19 +1,13 @@
-import {
-  IsString,
-  MinLength,
-  IsOptional,
-  IsNumber,
-  Min,
-} from 'class-validator';
+import { IsString, MinLength, IsOptional, IsNumber, Min } from 'class-validator'
 
 export class UpdateProfileDto {
   @IsOptional()
   @IsString()
   @MinLength(3)
-  username?: string;
+  username?: string
 
   @IsOptional()
   @IsNumber()
   @Min(0)
-  balance?: number;
+  balance?: number
 }

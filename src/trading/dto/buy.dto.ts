@@ -1,10 +1,10 @@
-import { IsString, IsNumber, Min } from 'class-validator';
+import { IsString, IsNumber, Min } from 'class-validator'
 
 export class BuyDto {
   @IsString()
-  stockTicker!: string;
+  stockTicker!: string
 
   @IsNumber()
   @Min(0.000001, { message: 'Quantity must be greater than zero' })
-  quantity!: number;
+  quantity!: number
 }

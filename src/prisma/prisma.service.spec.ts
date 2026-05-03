@@ -1,35 +1,35 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { ConfigService } from '@nestjs/config';
-import { PrismaService } from './prisma.service';
+import { Test, TestingModule } from '@nestjs/testing'
+import { ConfigService } from '@nestjs/config'
+import { PrismaService } from './prisma.service'
 
 // Mock PrismaClient since the generated client uses ESM (import.meta)
 jest.mock('@prisma/client', () => {
   return {
     PrismaClient: class MockPrismaClient {
       constructor(private options: Record<string, unknown> = {}) {}
-      $connect = jest.fn().mockResolvedValue(undefined);
-      $disconnect = jest.fn().mockResolvedValue(undefined);
-      $on = jest.fn();
+      $connect = jest.fn().mockResolvedValue(undefined)
+      $disconnect = jest.fn().mockResolvedValue(undefined)
+      $on = jest.fn()
     },
-  };
-});
+  }
+})
 
 // Mock the adapter and pg
 jest.mock('@prisma/adapter-pg', () => ({
   PrismaPg: class MockPrismaPg {
-    constructor(pool: unknown) {}
+    constructor() {}
   },
-}));
+}))
 
 jest.mock('pg', () => ({
   Pool: class MockPool {
-    end = jest.fn().mockResolvedValue(undefined);
+    end = jest.fn().mockResolvedValue(undefined)
   },
-}));
+}))
 
 describe('PrismaService', () => {
-  let service: PrismaService;
-  let module: TestingModule;
+  let service: PrismaService
+  let module: TestingModule
 
   beforeEach(async () => {
     module = await Test.createTestingModule({
@@ -44,27 +44,27 @@ describe('PrismaService', () => {
           },
         },
       ],
-    }).compile();
+    }).compile()
 
-    service = module.get<PrismaService>(PrismaService);
-  });
+    service = module.get<PrismaService>(PrismaService)
+  })
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
+    expect(service).toBeDefined()
+  })
 
   it('should expose $connect method', () => {
-    expect(service.$connect).toBeDefined();
-    expect(typeof service.$connect).toBe('function');
-  });
+    expect(service.$connect).toBeDefined()
+    expect(typeof service.$connect).toBe('function')
+  })
 
   it('should expose $disconnect method', () => {
-    expect(service.$disconnect).toBeDefined();
-    expect(typeof service.$disconnect).toBe('function');
-  });
+    expect(service.$disconnect).toBeDefined()
+    expect(typeof service.$disconnect).toBe('function')
+  })
 
   it('should expose $on method', () => {
-    expect(service.$on).toBeDefined();
-    expect(typeof service.$on).toBe('function');
-  });
-});
+    expect(service.$on).toBeDefined()
+    expect(typeof service.$on).toBe('function')
+  })
+})

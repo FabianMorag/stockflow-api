@@ -2,12 +2,12 @@ import {
   Injectable,
   NotFoundException,
   ConflictException,
-} from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
-import { ProfileService } from '../profiles/profile.service';
-import { StockService } from '../stocks/stock.service';
-import { CreateTickerDto } from './dto/create-ticker.dto';
-import { UpdateTickerDto } from './dto/update-ticker.dto';
+} from '@nestjs/common'
+import { PrismaService } from '../prisma/prisma.service'
+import { ProfileService } from '../profiles/profile.service'
+import { StockService } from '../stocks/stock.service'
+import { CreateTickerDto } from './dto/create-ticker.dto'
+import { UpdateTickerDto } from './dto/update-ticker.dto'
 
 @Injectable()
 export class AdminService {
@@ -18,19 +18,19 @@ export class AdminService {
   ) {}
 
   async adjustBalance(profileId: string, amount: number) {
-    const profile = await this.profileService.findOne(profileId);
+    const profile = await this.profileService.findOne(profileId)
 
     const currentBalance =
       typeof profile.balance === 'object' && 'toNumber' in profile.balance
         ? (profile.balance as any).toNumber()
-        : Number(profile.balance);
+        : Number(profile.balance)
 
-    const newBalance = currentBalance + amount;
+    const newBalance = currentBalance + amount
 
     return this.prisma.profile.update({
       where: { id: profileId },
       data: { balance: newBalance },
-    });
+    })
   }
 
   async createTicker(dto: CreateTickerDto) {
@@ -41,54 +41,54 @@ export class AdminService {
           name: dto.name,
           currentPrice: dto.price,
         },
-      });
+      })
     } catch (error: any) {
       if (error?.code === 'P2002') {
-        const target = error?.meta?.target?.[0];
-        throw new ConflictException(`${target} already exists`);
+        const target = error?.meta?.target?.[0]
+        throw new ConflictException(`${target} already exists`)
       }
-      throw error;
+      throw error
     }
   }
 
   async updateTicker(ticker: string, dto: UpdateTickerDto) {
     const stock = await this.prisma.stock.findUnique({
       where: { ticker },
-    });
+    })
 
     if (!stock) {
-      throw new NotFoundException(`Stock with ticker "${ticker}" not found`);
+      throw new NotFoundException(`Stock with ticker "${ticker}" not found`)
     }
 
-    const data: Record<string, unknown> = {};
-    if (dto.name !== undefined) data.name = dto.name;
-    if (dto.price !== undefined) data.currentPrice = dto.price;
+    const data: Record<string, unknown> = {}
+    if (dto.name !== undefined) data.name = dto.name
+    if (dto.price !== undefined) data.currentPrice = dto.price
 
     return this.prisma.stock.update({
       where: { ticker },
       data,
-    });
+    })
   }
 
   async deleteTicker(ticker: string) {
     const stock = await this.prisma.stock.findUnique({
       where: { ticker },
-    });
+    })
 
     if (!stock) {
-      throw new NotFoundException(`Stock with ticker "${ticker}" not found`);
+      throw new NotFoundException(`Stock with ticker "${ticker}" not found`)
     }
 
     const holdingCount = await this.prisma.holding.count({
       where: { stockTicker: ticker },
-    });
+    })
 
     if (holdingCount > 0) {
-      throw new ConflictException('Cannot delete stock with active holdings');
+      throw new ConflictException('Cannot delete stock with active holdings')
     }
 
     return this.prisma.stock.delete({
       where: { ticker },
-    });
+    })
   }
 }

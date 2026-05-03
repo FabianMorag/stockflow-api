@@ -1,6 +1,6 @@
 export class PortfolioSummaryDto {
-  profileId!: string;
-  balance!: number;
-  holdingsValue!: number;
-  netWorth!: number;
+  profileId!: string
+  balance!: number
+  holdingsValue!: number
+  netWorth!: number
 }

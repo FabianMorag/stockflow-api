@@ -1,11 +1,11 @@
-import { IsString, IsNumber, IsOptional } from 'class-validator';
+import { IsString, IsNumber, IsOptional } from 'class-validator'
 
 export class UpdateTickerDto {
   @IsOptional()
   @IsString()
-  name?: string;
+  name?: string
 
   @IsOptional()
   @IsNumber()
-  price?: number;
+  price?: number
 }

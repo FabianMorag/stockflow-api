@@ -1,59 +1,59 @@
 // Mock PrismaClient before any imports
 jest.mock('@prisma/client', () => ({
   PrismaClient: class MockPrismaClient {
-    constructor(options: Record<string, unknown> = {}) {}
-    $connect = jest.fn().mockResolvedValue(undefined);
-    $disconnect = jest.fn().mockResolvedValue(undefined);
-    $on = jest.fn();
+    constructor() {}
+    $connect = jest.fn().mockResolvedValue(undefined)
+    $disconnect = jest.fn().mockResolvedValue(undefined)
+    $on = jest.fn()
   },
-}));
+}))
 
 // Mock the adapter and pg
 jest.mock('@prisma/adapter-pg', () => ({
   PrismaPg: class MockPrismaPg {
-    constructor(pool: unknown) {}
+    constructor() {}
   },
-}));
+}))
 
 jest.mock('pg', () => ({
   Pool: class MockPool {
-    end = jest.fn().mockResolvedValue(undefined);
+    end = jest.fn().mockResolvedValue(undefined)
   },
-}));
+}))
 
 // Set env before importing ConfigModule
-process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test';
-process.env.PORT = '3000';
+process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
+process.env.PORT = '3000'
 
-import { Test, TestingModule } from '@nestjs/testing';
-import { PrismaService } from './prisma.service';
-import { PrismaModule } from './prisma.module';
-import { ConfigModule } from '../config/config.module';
+import { Test, TestingModule } from '@nestjs/testing'
+import { PrismaService } from './prisma.service'
+import { PrismaModule } from './prisma.module'
+import { ConfigModule } from '../config/config.module'
 
 describe('PrismaModule', () => {
-  let module: TestingModule;
+  let module: TestingModule
 
   beforeEach(async () => {
     module = await Test.createTestingModule({
       imports: [ConfigModule, PrismaModule],
-    }).compile();
-  });
+    }).compile()
+  })
 
   it('should be defined', () => {
-    expect(module).toBeDefined();
-  });
+    expect(module).toBeDefined()
+  })
 
   it('should provide PrismaService', () => {
-    const prismaService = module.get(PrismaService);
-    expect(prismaService).toBeDefined();
-  });
+    const prismaService = module.get(PrismaService)
+    expect(prismaService).toBeDefined()
+  })
 
   it('should export PrismaService', async () => {
     const testingModule = await Test.createTestingModule({
       imports: [ConfigModule, PrismaModule],
-    }).compile();
+    }).compile()
 
-    const exportedService = testingModule.get<PrismaService>(PrismaService);
-    expect(exportedService).toBeInstanceOf(PrismaService);
-  });
-});
+    const exportedService = testingModule.get<PrismaService>(PrismaService)
+    expect(exportedService).toBeInstanceOf(PrismaService)
+  })
+})

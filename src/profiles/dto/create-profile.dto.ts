@@ -5,18 +5,18 @@ import {
   IsOptional,
   IsNumber,
   Min,
-} from 'class-validator';
+} from 'class-validator'
 
 export class CreateProfileDto {
   @IsEmail()
-  email!: string;
+  email!: string
 
   @IsString()
   @MinLength(3)
-  username!: string;
+  username!: string
 
   @IsOptional()
   @IsNumber()
   @Min(0)
-  balance?: number;
+  balance?: number
 }
