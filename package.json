@@ -84,7 +84,6 @@
     "coverageDirectory": "../coverage",
     "testEnvironment": "node",
     "moduleNameMapper": {
-      "@prisma/client": "<rootDir>/../generated/prisma/client.ts",
       "^#admin/(.*)$": "<rootDir>/admin/$1",
       "^#auth/(.*)$": "<rootDir>/auth/$1",
       "^#config/(.*)$": "<rootDir>/config/$1",
