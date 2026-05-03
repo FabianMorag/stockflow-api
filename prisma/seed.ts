@@ -1,11 +1,11 @@
-import { PrismaClient } from '../generated/prisma/client';
-import 'dotenv/config';
-import { PrismaPg } from '@prisma/adapter-pg';
-import { Pool } from 'pg';
+import { PrismaClient } from '../generated/prisma/client'
+import 'dotenv/config'
+import { PrismaPg } from '@prisma/adapter-pg'
+import { Pool } from 'pg'
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-const adapter = new PrismaPg(pool);
-const prisma = new PrismaClient({ adapter });
+const pool = new Pool({ connectionString: process.env.DATABASE_URL })
+const adapter = new PrismaPg(pool)
+const prisma = new PrismaClient({ adapter })
 
 const stocks = [
   { ticker: 'AAPL', name: 'Apple Inc.', currentPrice: 178.5 },
@@ -16,17 +16,17 @@ const stocks = [
   { ticker: 'META', name: 'Meta Platforms Inc.', currentPrice: 505.75 },
   { ticker: 'NVDA', name: 'NVIDIA Corporation', currentPrice: 875.3 },
   { ticker: 'JPM', name: 'JPMorgan Chase & Co.', currentPrice: 198.4 },
-];
+]
 
 async function main() {
-  console.log('🌱 Starting seed...');
+  console.log('🌱 Starting seed...')
 
   // Clear existing data
-  await prisma.priceSnapshot.deleteMany();
-  await prisma.transaction.deleteMany();
-  await prisma.holding.deleteMany();
-  await prisma.stock.deleteMany();
-  await prisma.profile.deleteMany();
+  await prisma.priceSnapshot.deleteMany()
+  await prisma.transaction.deleteMany()
+  await prisma.holding.deleteMany()
+  await prisma.stock.deleteMany()
+  await prisma.profile.deleteMany()
 
   // Create stocks
   for (const stock of stocks) {
@@ -36,8 +36,8 @@ async function main() {
         name: stock.name,
         currentPrice: stock.currentPrice,
       },
-    });
-    console.log(`  ✓ Created stock: ${stock.ticker}`);
+    })
+    console.log(`  ✓ Created stock: ${stock.ticker}`)
   }
 
   // Create a default trader profile
@@ -47,17 +47,17 @@ async function main() {
       username: 'demo_trader',
       balance: 10000,
     },
-  });
-  console.log('  ✓ Created demo trader profile');
+  })
+  console.log('  ✓ Created demo trader profile')
 
-  console.log('✅ Seed completed successfully');
+  console.log('✅ Seed completed successfully')
 }
 
 main()
-  .catch((e) => {
-    console.error('❌ Seed failed:', e);
-    process.exit(1);
+  .catch(e => {
+    console.error('❌ Seed failed:', e)
+    process.exit(1)
   })
   .finally(async () => {
-    await prisma.$disconnect();
-  });
+    await prisma.$disconnect()
+  })
