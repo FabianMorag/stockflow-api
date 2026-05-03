@@ -1,13 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { MockJwtAuthGuard } from './mock-jwt-auth.guard'
+import { ExecutionContext } from '@nestjs/common'
+import { MockJwtAuthGuard, MockJwtUser } from './mock-jwt-auth.guard'
 
-function createMockContext(headers: Record<string, string>) {
-  const request = { headers, user: undefined as any }
+function createMockContext(headers: Record<string, string>): ExecutionContext {
+  const request: { headers: Record<string, string>; user?: MockJwtUser } = {
+    headers,
+  }
   return {
     switchToHttp: () => ({
       getRequest: () => request,
     }),
-  }
+  } as ExecutionContext
 }
 
 describe('MockJwtAuthGuard', () => {
@@ -28,7 +31,7 @@ describe('MockJwtAuthGuard', () => {
           'Bearer eyJzdWIiOiJ1c2VyLTEyMyIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSJ9.eyJzdWIiOiJ1c2VyLTEyMyJ9.sig',
       })
 
-      const result = guard.canActivate(ctx as any)
+      const result = guard.canActivate(ctx)
 
       expect(result).toBe(true)
     })
@@ -38,7 +41,7 @@ describe('MockJwtAuthGuard', () => {
         authorization: 'Bearer minimal.token.here',
       })
 
-      const result = guard.canActivate(ctx as any)
+      const result = guard.canActivate(ctx)
 
       expect(result).toBe(true)
     })
@@ -46,7 +49,7 @@ describe('MockJwtAuthGuard', () => {
     it('should return true when no authorization header present (dev mode)', () => {
       const ctx = createMockContext({})
 
-      const result = guard.canActivate(ctx as any)
+      const result = guard.canActivate(ctx)
 
       expect(result).toBe(true)
     })
@@ -62,20 +65,20 @@ describe('MockJwtAuthGuard', () => {
         authorization: `Bearer ${token}`,
       })
 
-      guard.canActivate(ctx as any)
-      const request = (ctx as any).switchToHttp().getRequest()
+      guard.canActivate(ctx)
+      const request = ctx.switchToHttp().getRequest<{ user?: MockJwtUser }>()
 
-      expect(request.user.sub).toBe('user-123')
-      expect(request.user.email).toBe('test@test.com')
+      expect(request.user?.sub).toBe('user-123')
+      expect(request.user?.email).toBe('test@test.com')
     })
 
     it('should attach dev-anonymous user when no auth header', () => {
       const ctx = createMockContext({})
 
-      guard.canActivate(ctx as any)
-      const request = (ctx as any).switchToHttp().getRequest()
+      guard.canActivate(ctx)
+      const request = ctx.switchToHttp().getRequest<{ user?: MockJwtUser }>()
 
-      expect(request.user.sub).toBe('dev-anonymous')
+      expect(request.user?.sub).toBe('dev-anonymous')
     })
   })
 
@@ -83,7 +86,7 @@ describe('MockJwtAuthGuard', () => {
     it('should return the request object', () => {
       const ctx = createMockContext({})
 
-      const result = guard.getRequest(ctx as any)
+      const result = guard.getRequest(ctx)
 
       expect(result).toHaveProperty('headers')
     })

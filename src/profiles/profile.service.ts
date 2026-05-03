@@ -4,8 +4,26 @@ import {
   ConflictException,
 } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
+import { Prisma } from '@prisma/client'
 import { CreateProfileDto } from './dto/create-profile.dto'
 import { UpdateProfileDto } from './dto/update-profile.dto'
+
+/** Check if an error is a Prisma unique constraint violation (P2002) */
+function isUniqueConstraintError(
+  error: unknown,
+): error is { code: 'P2002'; meta: { target?: string[] } } {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'code' in error &&
+    error.code === 'P2002'
+  )
+}
+
+/** Convert Prisma Decimal or plain number to JS number */
+function toNumber(value: Prisma.Decimal | number): number {
+  return typeof value === 'number' ? value : value.toNumber()
+}
 
 @Injectable()
 export class ProfileService {
@@ -38,9 +56,9 @@ export class ProfileService {
           balance: dto.balance ?? 10000,
         },
       })
-    } catch (error: any) {
-      if (error?.code === 'P2002') {
-        const target = error?.meta?.target?.[0]
+    } catch (error) {
+      if (isUniqueConstraintError(error)) {
+        const target = error.meta?.target?.[0]
         throw new ConflictException(`${target} already exists`)
       }
       throw error
@@ -55,9 +73,9 @@ export class ProfileService {
         where: { id },
         data: dto,
       })
-    } catch (error: any) {
-      if (error?.code === 'P2002') {
-        const target = error?.meta?.target?.[0]
+    } catch (error) {
+      if (isUniqueConstraintError(error)) {
+        const target = error.meta?.target?.[0]
         throw new ConflictException(`${target} already exists`)
       }
       throw error
@@ -66,12 +84,7 @@ export class ProfileService {
 
   async adjustBalance(id: string, amount: number) {
     const profile = await this.findOne(id)
-
-    const currentBalance =
-      typeof profile.balance === 'object' && 'toNumber' in profile.balance
-        ? (profile.balance as any).toNumber()
-        : Number(profile.balance)
-
+    const currentBalance = toNumber(profile.balance)
     const newBalance = currentBalance + amount
 
     return this.prisma.profile.update({

@@ -2,15 +2,14 @@ import { Injectable, BadRequestException } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
 import { StockService } from '../stocks/stock.service'
 import { ProfileService } from '../profiles/profile.service'
+import { Prisma } from '@prisma/client'
 import { BuyDto } from './dto/buy.dto'
 import { SellDto } from './dto/sell.dto'
 import { TradeResponseDto } from './dto/trade-response.dto'
 
 /** Convert Prisma Decimal or plain number to JS number */
-function toNumber(value: any): number {
-  return typeof value === 'object' && value !== null && 'toNumber' in value
-    ? value.toNumber()
-    : Number(value)
+function toNumber(value: Prisma.Decimal | number): number {
+  return typeof value === 'number' ? value : value.toNumber()
 }
 
 @Injectable()

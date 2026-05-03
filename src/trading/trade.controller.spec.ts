@@ -6,6 +6,7 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { BadRequestException } from '@nestjs/common'
 import { TradeController } from './trade.controller'
 import { TradingService } from './trading.service'
+import { JwtUserPayload } from '../auth/decorators/current-user.decorator'
 import { BuyDto } from './dto/buy.dto'
 import { SellDto } from './dto/sell.dto'
 
@@ -35,6 +36,8 @@ jest.mock('pg', () => ({
 
 describe('TradeController', () => {
   let controller: TradeController
+
+  const mockUser: JwtUserPayload = { sub: 'profile-1' }
 
   const mockTradeResponse = {
     id: 'txn-1',
@@ -84,9 +87,9 @@ describe('TradeController', () => {
         new BadRequestException('Insufficient balance'),
       )
 
-      await expect(
-        controller.buy({ sub: 'profile-1' } as any, buyDto),
-      ).rejects.toThrow(BadRequestException)
+      await expect(controller.buy(mockUser, buyDto)).rejects.toThrow(
+        BadRequestException,
+      )
     })
   })
 
@@ -115,9 +118,9 @@ describe('TradeController', () => {
         new BadRequestException('Insufficient holdings'),
       )
 
-      await expect(
-        controller.sell({ sub: 'profile-1' } as any, sellDto),
-      ).rejects.toThrow(BadRequestException)
+      await expect(controller.sell(mockUser, sellDto)).rejects.toThrow(
+        BadRequestException,
+      )
     })
   })
 })

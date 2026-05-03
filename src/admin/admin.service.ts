@@ -4,10 +4,28 @@ import {
   ConflictException,
 } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
+import { Prisma } from '@prisma/client'
 import { ProfileService } from '../profiles/profile.service'
 import { StockService } from '../stocks/stock.service'
 import { CreateTickerDto } from './dto/create-ticker.dto'
 import { UpdateTickerDto } from './dto/update-ticker.dto'
+
+/** Check if an error is a Prisma unique constraint violation (P2002) */
+function isUniqueConstraintError(
+  error: unknown,
+): error is { code: 'P2002'; meta: { target?: string[] } } {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'code' in error &&
+    error.code === 'P2002'
+  )
+}
+
+/** Convert Prisma Decimal or plain number to JS number */
+function toNumber(value: Prisma.Decimal | number): number {
+  return typeof value === 'number' ? value : value.toNumber()
+}
 
 @Injectable()
 export class AdminService {
@@ -19,12 +37,7 @@ export class AdminService {
 
   async adjustBalance(profileId: string, amount: number) {
     const profile = await this.profileService.findOne(profileId)
-
-    const currentBalance =
-      typeof profile.balance === 'object' && 'toNumber' in profile.balance
-        ? (profile.balance as any).toNumber()
-        : Number(profile.balance)
-
+    const currentBalance = toNumber(profile.balance)
     const newBalance = currentBalance + amount
 
     return this.prisma.profile.update({
@@ -42,9 +55,9 @@ export class AdminService {
           currentPrice: dto.price,
         },
       })
-    } catch (error: any) {
-      if (error?.code === 'P2002') {
-        const target = error?.meta?.target?.[0]
+    } catch (error) {
+      if (isUniqueConstraintError(error)) {
+        const target = error.meta?.target?.[0]
         throw new ConflictException(`${target} already exists`)
       }
       throw error

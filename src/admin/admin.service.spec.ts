@@ -162,18 +162,22 @@ describe('AdminService', () => {
     }
 
     it('should create and return a new stock', async () => {
-      mockPrismaService.stock.create.mockResolvedValue({
+      const createdStock = {
         ticker: 'GOOGL',
         name: 'Alphabet Inc.',
         currentPrice: 140.0,
-        lastUpdated: expect.any(Date),
-        createdAt: expect.any(Date),
-      })
+        lastUpdated: new Date(),
+        createdAt: new Date(),
+      }
+      mockPrismaService.stock.create.mockResolvedValue(createdStock)
 
       const result = await service.createTicker(createDto)
 
       expect(result.ticker).toBe('GOOGL')
       expect(result.name).toBe('Alphabet Inc.')
+      expect(result.currentPrice).toBe(140.0)
+      expect(result.lastUpdated).toBeInstanceOf(Date)
+      expect(result.createdAt).toBeInstanceOf(Date)
       expect(prisma.stock.create).toHaveBeenCalledWith({
         data: {
           ticker: 'GOOGL',
@@ -184,9 +188,10 @@ describe('AdminService', () => {
     })
 
     it('should throw ConflictException when ticker already exists', async () => {
-      const prismaError = new Error('Unique constraint failed')
-      ;(prismaError as any).code = 'P2002'
-      ;(prismaError as any).meta = { target: ['ticker'] }
+      const prismaError = Object.assign(new Error('Unique constraint failed'), {
+        code: 'P2002',
+        meta: { target: ['ticker'] },
+      })
       mockPrismaService.stock.create.mockImplementation(() => {
         throw prismaError
       })

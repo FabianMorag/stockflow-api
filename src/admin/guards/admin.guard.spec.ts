@@ -1,14 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { ForbiddenException } from '@nestjs/common'
+import { ForbiddenException, ExecutionContext } from '@nestjs/common'
 import { AdminGuard } from './admin.guard'
 
-function createMockContext(user: Record<string, unknown>) {
+function createMockContext(user: Record<string, unknown>): ExecutionContext {
   const request = { user }
   return {
     switchToHttp: () => ({
       getRequest: () => request,
     }),
-  }
+  } as ExecutionContext
 }
 
 describe('AdminGuard', () => {
@@ -26,7 +26,7 @@ describe('AdminGuard', () => {
     it('should return true when user has ADMIN role', () => {
       const ctx = createMockContext({ sub: 'user-1', role: 'ADMIN' })
 
-      const result = guard.canActivate(ctx as any)
+      const result = guard.canActivate(ctx)
 
       expect(result).toBe(true)
     })
@@ -34,22 +34,20 @@ describe('AdminGuard', () => {
     it('should throw ForbiddenException when user has TRADER role', () => {
       const ctx = createMockContext({ sub: 'user-1', role: 'TRADER' })
 
-      expect(() => guard.canActivate(ctx as any)).toThrow(ForbiddenException)
-      expect(() => guard.canActivate(ctx as any)).toThrow(
-        'Admin access required',
-      )
+      expect(() => guard.canActivate(ctx)).toThrow(ForbiddenException)
+      expect(() => guard.canActivate(ctx)).toThrow('Admin access required')
     })
 
     it('should throw ForbiddenException when user has no role', () => {
       const ctx = createMockContext({ sub: 'user-1' })
 
-      expect(() => guard.canActivate(ctx as any)).toThrow(ForbiddenException)
+      expect(() => guard.canActivate(ctx)).toThrow(ForbiddenException)
     })
 
     it('should throw ForbiddenException when user is undefined', () => {
       const ctx = createMockContext({})
 
-      expect(() => guard.canActivate(ctx as any)).toThrow(ForbiddenException)
+      expect(() => guard.canActivate(ctx)).toThrow(ForbiddenException)
     })
   })
 })

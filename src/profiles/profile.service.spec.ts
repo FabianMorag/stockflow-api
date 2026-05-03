@@ -189,18 +189,20 @@ describe('ProfileService', () => {
     })
 
     it('should throw ConflictException when email already exists', async () => {
-      const prismaError = new Error('Unique constraint failed')
-      ;(prismaError as any).code = 'P2002'
-      ;(prismaError as any).meta = { target: ['email'] }
+      const prismaError = Object.assign(new Error('Unique constraint failed'), {
+        code: 'P2002',
+        meta: { target: ['email'] },
+      })
       mockPrismaService.profile.create.mockRejectedValue(prismaError)
 
       await expect(service.create(createDto)).rejects.toThrow(ConflictException)
     })
 
     it('should throw ConflictException when username already exists', async () => {
-      const prismaError = new Error('Unique constraint failed')
-      ;(prismaError as any).code = 'P2002'
-      ;(prismaError as any).meta = { target: ['username'] }
+      const prismaError = Object.assign(new Error('Unique constraint failed'), {
+        code: 'P2002',
+        meta: { target: ['username'] },
+      })
       mockPrismaService.profile.create.mockRejectedValue(prismaError)
 
       await expect(service.create(createDto)).rejects.toThrow(ConflictException)

@@ -5,6 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
+import { Request } from 'express'
 import { jwtVerify, createRemoteJWKSet } from 'jose'
 
 @Injectable()
@@ -27,7 +28,9 @@ export class SupabaseJwtAuthGuard implements CanActivate {
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest()
+    const request = context
+      .switchToHttp()
+      .getRequest<Request & { user?: Record<string, unknown> }>()
     const authHeader = request.headers.authorization
 
     if (!authHeader?.startsWith('Bearer ')) {
@@ -45,7 +48,9 @@ export class SupabaseJwtAuthGuard implements CanActivate {
     }
   }
 
-  getRequest(context: ExecutionContext) {
+  getRequest(
+    context: ExecutionContext,
+  ): Request & { user?: Record<string, unknown> } {
     return context.switchToHttp().getRequest()
   }
 }

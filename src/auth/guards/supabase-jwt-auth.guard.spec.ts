@@ -3,17 +3,20 @@ process.env.DATABASE_URL = 'postgresql://test:test@localhost:5435/test'
 process.env.PORT = '3000'
 
 import { Test, TestingModule } from '@nestjs/testing'
-import { UnauthorizedException } from '@nestjs/common'
+import { UnauthorizedException, ExecutionContext } from '@nestjs/common'
 import { SupabaseJwtAuthGuard } from './supabase-jwt-auth.guard'
 import { ConfigService } from '@nestjs/config'
+import { Request } from 'express'
 
-function createMockContext(headers: Record<string, string>) {
-  const request = { headers, user: undefined as unknown }
+function createMockContext(headers: Record<string, string>): ExecutionContext {
+  const request: Partial<Request> & { user?: Record<string, unknown> } = {
+    headers: headers,
+  }
   return {
     switchToHttp: () => ({
       getRequest: () => request,
     }),
-  }
+  } as ExecutionContext
 }
 
 // Mock jose library (ESM-only)
@@ -53,7 +56,7 @@ describe('SupabaseJwtAuthGuard', () => {
     it('should throw UnauthorizedException when no authorization header', async () => {
       const ctx = createMockContext({})
 
-      await expect(guard.canActivate(ctx as any)).rejects.toThrow(
+      await expect(guard.canActivate(ctx)).rejects.toThrow(
         UnauthorizedException,
       )
     })
@@ -63,7 +66,7 @@ describe('SupabaseJwtAuthGuard', () => {
         authorization: 'Basic abc123',
       })
 
-      await expect(guard.canActivate(ctx as any)).rejects.toThrow(
+      await expect(guard.canActivate(ctx)).rejects.toThrow(
         UnauthorizedException,
       )
     })
@@ -77,11 +80,13 @@ describe('SupabaseJwtAuthGuard', () => {
         authorization: 'Bearer valid.token.here',
       })
 
-      const result = await guard.canActivate(ctx as any)
+      const result = await guard.canActivate(ctx)
 
       expect(result).toBe(true)
-      const request = (ctx as any).switchToHttp().getRequest()
-      expect(request.user.sub).toBe('user-123')
+      const request = ctx
+        .switchToHttp()
+        .getRequest<{ user?: Record<string, unknown> }>()
+      expect(request.user?.sub).toBe('user-123')
     })
 
     it('should throw UnauthorizedException when JWT verification fails', async () => {
@@ -91,7 +96,7 @@ describe('SupabaseJwtAuthGuard', () => {
         authorization: 'Bearer invalid.token.here',
       })
 
-      await expect(guard.canActivate(ctx as any)).rejects.toThrow(
+      await expect(guard.canActivate(ctx)).rejects.toThrow(
         UnauthorizedException,
       )
     })
@@ -101,7 +106,7 @@ describe('SupabaseJwtAuthGuard', () => {
     it('should return the request object', () => {
       const ctx = createMockContext({})
 
-      const result = guard.getRequest(ctx as any)
+      const result = guard.getRequest(ctx)
 
       expect(result).toHaveProperty('headers')
     })
