@@ -1,4 +1,4 @@
-# AGENTS.md — finsim-api
+# AGENTS.md — Stockflow-api
 
 ## Stack
 
