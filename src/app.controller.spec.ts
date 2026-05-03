@@ -1,3 +1,7 @@
+// Set env vars before importing AppModule (ConfigModule validates at import time)
+process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test';
+process.env.PORT = '3000';
+
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -17,6 +21,15 @@ describe('AppController', () => {
   describe('root', () => {
     it('should return "Hello World!"', () => {
       expect(appController.getHello()).toBe('Hello World!');
+    });
+  });
+
+  describe('health', () => {
+    it('should return health status', () => {
+      expect(appController.getHealth()).toEqual({
+        status: 'ok',
+        timestamp: expect.any(String),
+      });
     });
   });
 });
