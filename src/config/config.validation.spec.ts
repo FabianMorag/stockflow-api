@@ -21,10 +21,23 @@ describe('validateConfig', () => {
     expect(() => validateConfig(envVars)).toThrow('DATABASE_URL is required')
   })
 
-  it('should throw when PORT is missing', () => {
+  it('should default PORT to 3000 when missing', () => {
     const envVars = { DATABASE_URL: 'postgresql://localhost:5432/db' }
 
-    expect(() => validateConfig(envVars)).toThrow('PORT is required')
+    const result = validateConfig(envVars)
+
+    expect(result.PORT).toBe(3000)
+  })
+
+  it('should use default PORT when not provided but DATABASE_URL exists', () => {
+    const envVars = { DATABASE_URL: 'postgresql://localhost:5432/db' }
+
+    const result = validateConfig(envVars)
+
+    expect(result).toEqual({
+      DATABASE_URL: 'postgresql://localhost:5432/db',
+      PORT: 3000,
+    })
   })
 
   it('should throw when PORT is not a valid number', () => {
@@ -34,12 +47,5 @@ describe('validateConfig', () => {
     }
 
     expect(() => validateConfig(envVars)).toThrow('PORT must be a valid number')
-  })
-
-  it('should use default PORT when not provided but DATABASE_URL exists', () => {
-    const envVars = { DATABASE_URL: 'postgresql://localhost:5432/db' }
-
-    // PORT is required, so this should still throw
-    expect(() => validateConfig(envVars)).toThrow('PORT is required')
   })
 })

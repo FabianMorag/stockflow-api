@@ -11,10 +11,7 @@ export function validateConfig(
     throw new Error('DATABASE_URL is required')
   }
 
-  const portStr = env.PORT
-  if (!portStr) {
-    throw new Error('PORT is required')
-  }
+  const portStr = env.PORT ?? '3000'
 
   const port = Number(portStr)
   if (Number.isNaN(port)) {
