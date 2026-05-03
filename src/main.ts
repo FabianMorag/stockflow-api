@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core'
 import { ValidationPipe } from '@nestjs/common'
 import { WsAdapter } from '@nestjs/platform-ws'
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import { AppModule } from './app.module'
 
 async function bootstrap() {
@@ -23,6 +24,16 @@ async function bootstrap() {
 
   // WebSocket adapter (ws)
   app.useWebSocketAdapter(new WsAdapter(app))
+
+  // Swagger / OpenAPI documentation
+  const config = new DocumentBuilder()
+    .setTitle('StockFlow API')
+    .setDescription('Paper-trading stock market simulator API')
+    .setVersion('0.1.0')
+    .addBearerAuth()
+    .build()
+  const document = SwaggerModule.createDocument(app, config)
+  SwaggerModule.setup('api', app, document)
 
   await app.listen(process.env.PORT ?? 3000)
 }

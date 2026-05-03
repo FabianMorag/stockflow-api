@@ -6,9 +6,9 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { TradingModule } from './trading.module'
 import { TradingService } from './trading.service'
 import { TradeController } from './trade.controller'
-import { StocksModule } from '../stocks/stocks.module'
-import { ProfilesModule } from '../profiles/profiles.module'
-import { AuthModule } from '../auth/auth.module'
+import { StocksModule } from '#stocks/stocks.module'
+import { ProfilesModule } from '#profiles/profiles.module'
+import { AuthModule } from '#auth/auth.module'
 
 // Mock PrismaClient (ESM module with import.meta)
 jest.mock('@prisma/client', () => {

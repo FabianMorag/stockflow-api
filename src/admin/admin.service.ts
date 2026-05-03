@@ -3,10 +3,10 @@ import {
   NotFoundException,
   ConflictException,
 } from '@nestjs/common'
-import { PrismaService } from '../prisma/prisma.service'
+import { PrismaService } from '#prisma/prisma.service'
 import { Prisma } from '@prisma/client'
-import { ProfileService } from '../profiles/profile.service'
-import { StockService } from '../stocks/stock.service'
+import { ProfileService } from '#profiles/profile.service'
+import { StockService } from '#stocks/stock.service'
 import { CreateTickerDto } from './dto/create-ticker.dto'
 import { UpdateTickerDto } from './dto/update-ticker.dto'
 

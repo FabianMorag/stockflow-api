@@ -6,7 +6,7 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { BadRequestException } from '@nestjs/common'
 import { TradeController } from './trade.controller'
 import { TradingService } from './trading.service'
-import { JwtUserPayload } from '../auth/decorators/current-user.decorator'
+import { JwtUserPayload } from '#auth/decorators/current-user.decorator'
 import { BuyDto } from './dto/buy.dto'
 import { SellDto } from './dto/sell.dto'
 

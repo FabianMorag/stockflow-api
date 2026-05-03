@@ -9,9 +9,9 @@ import {
 import { TradingService } from './trading.service'
 import { BuyDto } from './dto/buy.dto'
 import { SellDto } from './dto/sell.dto'
-import { MockJwtAuthGuard } from '../auth/guards/mock-jwt-auth.guard'
-import { CurrentUser } from '../auth/decorators/current-user.decorator'
-import type { JwtUserPayload } from '../auth/decorators/current-user.decorator'
+import { MockJwtAuthGuard } from '#auth/guards/mock-jwt-auth.guard'
+import { CurrentUser } from '#auth/decorators/current-user.decorator'
+import type { JwtUserPayload } from '#auth/decorators/current-user.decorator'
 
 @Controller('trades')
 @UseGuards(MockJwtAuthGuard)

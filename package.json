@@ -26,6 +26,7 @@
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/platform-ws": "^11.1.19",
     "@nestjs/schedule": "^6.1.3",
+    "@nestjs/swagger": "^11.4.2",
     "@nestjs/websockets": "^11.1.19",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
@@ -83,8 +84,28 @@
     "coverageDirectory": "../coverage",
     "testEnvironment": "node",
     "moduleNameMapper": {
-      "@prisma/client": "<rootDir>/../generated/prisma/client.ts"
+      "@prisma/client": "<rootDir>/../generated/prisma/client.ts",
+      "^#admin/(.*)$": "<rootDir>/admin/$1",
+      "^#auth/(.*)$": "<rootDir>/auth/$1",
+      "^#config/(.*)$": "<rootDir>/config/$1",
+      "^#market/(.*)$": "<rootDir>/market/$1",
+      "^#portfolio/(.*)$": "<rootDir>/portfolio/$1",
+      "^#prisma/(.*)$": "<rootDir>/prisma/$1",
+      "^#profiles/(.*)$": "<rootDir>/profiles/$1",
+      "^#stocks/(.*)$": "<rootDir>/stocks/$1",
+      "^#trading/(.*)$": "<rootDir>/trading/$1"
     }
+  },
+  "imports": {
+    "#admin/*": "./src/admin/*",
+    "#auth/*": "./src/auth/*",
+    "#config/*": "./src/config/*",
+    "#market/*": "./src/market/*",
+    "#portfolio/*": "./src/portfolio/*",
+    "#prisma/*": "./src/prisma/*",
+    "#profiles/*": "./src/profiles/*",
+    "#stocks/*": "./src/stocks/*",
+    "#trading/*": "./src/trading/*"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"

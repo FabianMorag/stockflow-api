@@ -28,7 +28,7 @@ process.env.PORT = '3000'
 import { Test, TestingModule } from '@nestjs/testing'
 import { PrismaService } from './prisma.service'
 import { PrismaModule } from './prisma.module'
-import { ConfigModule } from '../config/config.module'
+import { ConfigModule } from '#config/config.module'
 
 describe('PrismaModule', () => {
   let module: TestingModule

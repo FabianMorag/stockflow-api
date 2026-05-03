@@ -10,6 +10,7 @@
     "target": "ES2023",
     "sourceMap": true,
     "outDir": "./dist",
+    "rootDir": ".",
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": true,
@@ -19,7 +20,16 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@prisma/client": ["./generated/prisma/client.ts"]
+      "@prisma/client": ["./generated/prisma/client.ts"],
+      "#admin/*": ["./src/admin/*"],
+      "#auth/*": ["./src/auth/*"],
+      "#config/*": ["./src/config/*"],
+      "#market/*": ["./src/market/*"],
+      "#portfolio/*": ["./src/portfolio/*"],
+      "#prisma/*": ["./src/prisma/*"],
+      "#profiles/*": ["./src/profiles/*"],
+      "#stocks/*": ["./src/stocks/*"],
+      "#trading/*": ["./src/trading/*"]
     }
   }
 }

@@ -7,9 +7,9 @@ import { AdminModule } from './admin.module'
 import { AdminController } from './admin.controller'
 import { AdminService } from './admin.service'
 import { AdminGuard } from './guards/admin.guard'
-import { PrismaService } from '../prisma/prisma.service'
-import { ProfileService } from '../profiles/profile.service'
-import { StockService } from '../stocks/stock.service'
+import { PrismaService } from '#prisma/prisma.service'
+import { ProfileService } from '#profiles/profile.service'
+import { StockService } from '#stocks/stock.service'
 
 // Mock PrismaClient
 jest.mock('@prisma/client', () => {

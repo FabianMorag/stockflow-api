@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { MarketService } from './market.service'
-import { PrismaService } from '../prisma/prisma.service'
-import { StockService } from '../stocks/stock.service'
+import { PrismaService } from '#prisma/prisma.service'
+import { StockService } from '#stocks/stock.service'
 
 // Mock PrismaClient (ESM module with import.meta)
 jest.mock('@prisma/client', () => {

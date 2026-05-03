@@ -5,9 +5,9 @@ process.env.PORT = '3000'
 import { Test, TestingModule } from '@nestjs/testing'
 import { NotFoundException } from '@nestjs/common'
 import { PortfolioService } from './portfolio.service'
-import { PrismaService } from '../prisma/prisma.service'
-import { StockService } from '../stocks/stock.service'
-import { ProfileService } from '../profiles/profile.service'
+import { PrismaService } from '#prisma/prisma.service'
+import { StockService } from '#stocks/stock.service'
+import { ProfileService } from '#profiles/profile.service'
 
 // Mock PrismaClient (ESM module with import.meta)
 jest.mock('@prisma/client', () => {

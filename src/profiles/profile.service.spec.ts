@@ -5,7 +5,7 @@ process.env.PORT = '3000'
 import { Test, TestingModule } from '@nestjs/testing'
 import { NotFoundException, ConflictException } from '@nestjs/common'
 import { ProfileService } from './profile.service'
-import { PrismaService } from '../prisma/prisma.service'
+import { PrismaService } from '#prisma/prisma.service'
 import { CreateProfileDto } from './dto/create-profile.dto'
 import { UpdateProfileDto } from './dto/update-profile.dto'
 

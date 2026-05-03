@@ -1,8 +1,8 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common'
 import { PortfolioService } from './portfolio.service'
-import { MockJwtAuthGuard } from '../auth/guards/mock-jwt-auth.guard'
-import { CurrentUser } from '../auth/decorators/current-user.decorator'
-import type { JwtUserPayload } from '../auth/decorators/current-user.decorator'
+import { MockJwtAuthGuard } from '#auth/guards/mock-jwt-auth.guard'
+import { CurrentUser } from '#auth/decorators/current-user.decorator'
+import type { JwtUserPayload } from '#auth/decorators/current-user.decorator'
 
 @Controller('portfolio')
 @UseGuards(MockJwtAuthGuard)

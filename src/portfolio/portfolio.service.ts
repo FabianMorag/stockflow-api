@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
-import { PrismaService } from '../prisma/prisma.service'
-import { StockService } from '../stocks/stock.service'
-import { ProfileService } from '../profiles/profile.service'
+import { PrismaService } from '#prisma/prisma.service'
+import { StockService } from '#stocks/stock.service'
+import { ProfileService } from '#profiles/profile.service'
 import { HoldingResponseDto } from './dto/holding-response.dto'
 import { PortfolioSummaryDto } from './dto/portfolio-summary.dto'
 import {

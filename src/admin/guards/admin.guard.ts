@@ -4,7 +4,7 @@ import {
   ExecutionContext,
   ForbiddenException,
 } from '@nestjs/common'
-import { JwtUserPayload } from '../../auth/decorators/current-user.decorator'
+import { JwtUserPayload } from '#auth/decorators/current-user.decorator'
 
 @Injectable()
 export class AdminGuard implements CanActivate {

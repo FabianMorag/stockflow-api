@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { NotFoundException } from '@nestjs/common'
 import { StockService } from './stock.service'
-import { PrismaService } from '../prisma/prisma.service'
+import { PrismaService } from '#prisma/prisma.service'
 import { CreateStockDto } from './dto/create-stock.dto'
 import { UpdateStockDto } from './dto/update-stock.dto'
 

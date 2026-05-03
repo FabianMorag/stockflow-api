@@ -12,7 +12,7 @@ import {
 import { ProfileService } from './profile.service'
 import { CreateProfileDto } from './dto/create-profile.dto'
 import { UpdateProfileDto } from './dto/update-profile.dto'
-import { MockJwtAuthGuard } from '../auth/guards/mock-jwt-auth.guard'
+import { MockJwtAuthGuard } from '#auth/guards/mock-jwt-auth.guard'
 
 @Controller('profiles')
 @UseGuards(MockJwtAuthGuard)
