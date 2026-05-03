@@ -22,7 +22,6 @@ jest.mock('@prisma/adapter-pg', () => ({
 
 jest.mock('pg', () => ({
   Pool: class MockPool {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     end = jest.fn().mockResolvedValue(undefined);
   },
 }));
