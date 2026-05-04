@@ -7,6 +7,14 @@
     "^.+\\.(t|j)s$": "ts-jest"
   },
   "moduleNameMapper": {
-    "@prisma/client": "<rootDir>/../generated/prisma/client.ts"
+    "^#admin/(.*)$": "<rootDir>/../src/admin/$1",
+    "^#auth/(.*)$": "<rootDir>/../src/auth/$1",
+    "^#config/(.*)$": "<rootDir>/../src/config/$1",
+    "^#market/(.*)$": "<rootDir>/../src/market/$1",
+    "^#portfolio/(.*)$": "<rootDir>/../src/portfolio/$1",
+    "^#prisma/(.*)$": "<rootDir>/../src/prisma/$1",
+    "^#profiles/(.*)$": "<rootDir>/../src/profiles/$1",
+    "^#stocks/(.*)$": "<rootDir>/../src/stocks/$1",
+    "^#trading/(.*)$": "<rootDir>/../src/trading/$1"
   }
 }
